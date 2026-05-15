@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Select as SelectPrimitive } from 'radix-ui'
 import { ChevronDown, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
