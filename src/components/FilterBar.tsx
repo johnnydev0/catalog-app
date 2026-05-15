@@ -17,19 +17,29 @@ interface FilterBarProps {
   totalCount: number
 }
 
+const ALL = '__all__'
+
 const statusOptions = [
-  { value: '', label: 'Todos os status' },
+  { value: ALL, label: 'Todos os status' },
   ...STATUS_OPTIONS.map((o) => ({ value: o.value, label: o.label })),
 ]
 
 const categoryOptions = [
-  { value: '', label: 'Todas as categorias' },
+  { value: ALL, label: 'Todas as categorias' },
   ...CATEGORY_OPTIONS.map((o) => ({ value: o.value, label: o.label })),
 ]
 
 function FilterBar({ filters, onChange, resultCount, totalCount }: FilterBarProps) {
   const hasFilters = filters.search || filters.status || filters.category
   const isFiltering = Boolean(hasFilters) && resultCount !== totalCount
+
+  function toSelectValue(v: string) {
+    return v === '' ? ALL : v
+  }
+
+  function fromSelectValue(v: string) {
+    return v === ALL ? '' : v
+  }
 
   return (
     <div className="space-y-3">
@@ -51,16 +61,16 @@ function FilterBar({ filters, onChange, resultCount, totalCount }: FilterBarProp
           <div className="w-44">
             <Select
               options={statusOptions}
-              value={filters.status}
-              onValueChange={(v) => onChange({ ...filters, status: v })}
+              value={toSelectValue(filters.status)}
+              onValueChange={(v) => onChange({ ...filters, status: fromSelectValue(v) })}
               placeholder="Status"
             />
           </div>
           <div className="w-52">
             <Select
               options={categoryOptions}
-              value={filters.category}
-              onValueChange={(v) => onChange({ ...filters, category: v })}
+              value={toSelectValue(filters.category)}
+              onValueChange={(v) => onChange({ ...filters, category: fromSelectValue(v) })}
               placeholder="Categoria"
             />
           </div>
