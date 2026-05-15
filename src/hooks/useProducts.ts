@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { productService } from '@/services/productService';
 import { toast } from '@/components/ui/Toast';
-import type { ProductFormData } from '@/types/product';
+import type { Product, ProductFormData } from '@/types/product';
 
 interface Filters {
   search: string;
@@ -47,11 +47,24 @@ export function useProducts() {
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => productService.delete(id),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ['products'] });
+      const previous = queryClient.getQueryData<Product[]>(['products']);
+      queryClient.setQueryData<Product[]>(['products'], (old) =>
+        old?.filter((p) => p.id !== id) ?? [],
+      );
+      return { previous };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       toast.success('Produto excluído com sucesso!');
     },
-    onError: (err: Error) => toast.error(err.message),
+    onError: (err: Error, _id, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(['products'], context.previous);
+      }
+      toast.error(err.message);
+    },
   });
 
   const filteredProducts = useMemo(() => {
