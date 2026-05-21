@@ -5,6 +5,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { ProductForm } from '@/components/ProductForm'
 import { FilterBar } from '@/components/FilterBar'
 import { StatsCards } from '@/components/StatsCards'
+
 import { Drawer } from '@/components/ui/Drawer'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -44,8 +45,10 @@ export function CatalogPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-foreground">Produtos</h2>
-          <p className="text-sm text-muted-foreground">Gerencie o catálogo de itens</p>
+          <h2 className="font-heading text-2xl font-semibold text-foreground tracking-tight">
+            Produtos
+          </h2>
+          <p className="text-sm text-muted-foreground mt-0.5">Gerencie o catálogo de itens</p>
         </div>
         <Button onClick={openCreate} aria-label="Adicionar novo produto">
           <Plus size={16} />
@@ -60,6 +63,7 @@ export function CatalogPage() {
         onChange={setFilters}
         resultCount={filteredProducts.length}
         totalCount={products.length}
+        products={products}
       />
 
       {isLoading && <LoadingSkeleton />}
@@ -93,6 +97,8 @@ export function CatalogPage() {
           action={{ label: 'Adicionar produto', onClick: openCreate }}
         />
       )}
+
+ 
 
       {!isLoading && !isError && filteredProducts.length > 0 && (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

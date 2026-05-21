@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { Package } from 'lucide-react'
+import { Boxes } from 'lucide-react'
 
 interface LayoutProps {
   children: ReactNode
@@ -8,20 +8,22 @@ interface LayoutProps {
 function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-primary p-2">
-              <Package size={20} className="text-primary-foreground" />
+      <header className="border-b border-border bg-card">
+        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4">
+            <div className="rounded-2xl bg-friendly-blush p-2.5 shadow-sm">
+              <Boxes size={22} className="text-friendly-ink" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-foreground">Catálogo de Itens</h1>
+              <h1 className="font-heading text-xl font-semibold tracking-tight text-foreground">
+                Catálogo de Itens
+              </h1>
               <p className="text-xs text-muted-foreground">Gerencie seus produtos</p>
             </div>
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</main>
     </div>
   )
 }
