@@ -7,7 +7,7 @@ SPA de gerenciamento de catálogo de produtos. Permite listar, criar, editar e e
 - Listagem de produtos em grid responsivo (1 → 2 → 3 colunas)
 - Criação e edição via drawer lateral com validação em tempo real
 - Exclusão com confirmação e remoção otimista da UI
-- Busca por nome, descrição ou SKU
+- Busca textual por nome, descrição ou SKU com fallback de linguagem natural via IA
 - Filtros por status e categoria
 - Cards de estatísticas (total, ativos, inativos, esgotados)
 - Toasts de feedback para operações CRUD
@@ -24,8 +24,44 @@ SPA de gerenciamento de catálogo de produtos. Permite listar, criar, editar e e
 | Formulários | React Hook Form 7 + Zod 4 |
 | Componentes UI | shadcn/ui (Radix primitives) |
 | Ícones | Lucide React |
+| IA | Anthropic SDK (Claude Haiku) |
 | Persistência | localStorage |
 | Testes | Vitest + Testing Library |
+
+## Busca com linguagem natural (IA)
+
+O campo de busca usa uma estratégia de dois estágios:
+
+1. **Busca literal**: verifica se a query bate diretamente em nome, descrição ou SKU de algum produto. Se sim, aplica o filtro sem chamar a IA.
+2. **Fallback com IA**: se nenhum produto for encontrado literalmente, a query é enviada ao Claude Haiku, que extrai filtros estruturados (`search`, `status`, `category`) a partir do português natural.
+
+Exemplos que ativam o fallback de IA:
+
+| Query | Filtros extraídos | Resultado |
+|---|---|---|
+| `computador apple` | `search: apple, category: electronics` | MacBook Air M2 |
+| `roupa de frio` | `search: jaqueta, category: clothing` | Jaqueta Corta-Vento |
+| `fone sem fio esgotado` | `status: out_of_stock, category: electronics` | JBL Tune 770NC |
+| `proteína em pó` | `search: whey, category: food` | Whey Protein 2kg |
+| `câmera para reunião` | `search: webcam, category: electronics` | Webcam Logitech C920 |
+
+Os chips roxos abaixo da barra indicam quais filtros a IA extraiu.
+
+### Configuração da chave de API
+
+Crie um arquivo `.env.local` na raiz do projeto:
+
+```bash
+cp .env.example .env.local
+```
+
+Preencha com sua chave da Anthropic (obtenha em [console.anthropic.com](https://console.anthropic.com/settings/keys)):
+
+```
+VITE_ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Sem a chave, a busca literal continua funcionando normalmente.
 
 ## Instalação e uso
 
@@ -63,6 +99,9 @@ Ao confirmar a exclusão, o produto é removido do cache imediatamente via `onMu
 
 ### Separação de concerns nos hooks
 `useProducts` centraliza dados (query + mutations + filtros + stats). `useCatalogActions` encapsula o estado de UI (drawer aberto/fechado, produto em edição, confirmação de exclusão). Essa separação mantém `CatalogPage` puramente declarativo — sem lógica de estado espalhada no componente.
+
+### Busca com IA: literal-first, AI-fallback
+A busca inteligente não chama a IA por padrão — ela primeiro conta quantos produtos batem literalmente com a query. Essa escolha evita latência e custo para buscas simples (a maioria dos casos). Só quando não há nenhuma correspondência literal é que a chamada ao Claude Haiku é feita. O modelo recebe um system prompt em inglês com exemplos de mapeamento PT-BR → filtros estruturados e retorna JSON puro, que é aplicado diretamente aos filtros existentes. Isso mantém a lógica de filtragem toda no cliente, sem endpoint intermediário.
 
 ### Filtros como estado local
 Os filtros (busca, status, categoria) vivem em `useState` dentro de `useProducts` e derivam `filteredProducts` via `useMemo`. Não há sincronização com URL/query params — decisão consciente por ser uma SPA sem roteamento. Se adicionássemos rotas, migraríamos para `useSearchParams`.

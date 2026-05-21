@@ -75,45 +75,54 @@ describe('ProductCard', () => {
 
 describe('FilterBar', () => {
   it('renderiza o campo de busca', () => {
-    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} resultCount={5} totalCount={5} />)
+    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} resultCount={5} totalCount={5} products={[]} />)
     expect(screen.getByPlaceholderText(/buscar/i)).toBeInTheDocument()
   })
 
   it('não exibe o botão limpar quando não há filtros ativos', () => {
-    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} resultCount={5} totalCount={5} />)
+    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} resultCount={5} totalCount={5} products={[]} />)
     expect(screen.queryByRole('button', { name: /limpar/i })).not.toBeInTheDocument()
   })
 
   it('exibe o botão limpar quando há filtro de busca ativo', () => {
     const filters = { ...defaultFilters, search: 'notebook' }
-    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={2} totalCount={5} />)
+    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={2} totalCount={5} products={[]} />)
     expect(screen.getByRole('button', { name: /limpar/i })).toBeInTheDocument()
   })
 
-  it('chama onChange com o novo valor ao digitar na busca', () => {
+  it('chama onChange com termo literal ao clicar em buscar quando há correspondência', () => {
     const onChange = vi.fn()
-    render(<FilterBar filters={defaultFilters} onChange={onChange} resultCount={5} totalCount={5} />)
-    fireEvent.change(screen.getByPlaceholderText(/buscar/i), { target: { value: 'notebook' } })
-    expect(onChange).toHaveBeenCalledWith({ ...defaultFilters, search: 'notebook' })
+    render(
+      <FilterBar
+        filters={defaultFilters}
+        onChange={onChange}
+        resultCount={5}
+        totalCount={5}
+        products={[mockProduct]}
+      />,
+    )
+    fireEvent.change(screen.getByPlaceholderText(/buscar/i), { target: { value: 'Notebook' } })
+    fireEvent.click(screen.getByRole('button', { name: /executar busca/i }))
+    expect(onChange).toHaveBeenCalledWith({ ...defaultFilters, search: 'Notebook' })
   })
 
   it('chama onChange com filtros zerados ao clicar em limpar', () => {
     const onChange = vi.fn()
     const filters = { search: 'notebook', status: '', category: '' }
-    render(<FilterBar filters={filters} onChange={onChange} resultCount={2} totalCount={5} />)
+    render(<FilterBar filters={filters} onChange={onChange} resultCount={2} totalCount={5} products={[]} />)
     fireEvent.click(screen.getByRole('button', { name: /limpar/i }))
     expect(onChange).toHaveBeenCalledWith({ search: '', status: '', category: '' })
   })
 
   it('exibe a contagem de resultados quando está filtrando', () => {
     const filters = { ...defaultFilters, search: 'notebook' }
-    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={2} totalCount={5} />)
+    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={2} totalCount={5} products={[]} />)
     expect(screen.getByText(/2 de 5/)).toBeInTheDocument()
   })
 
   it('não exibe contagem quando todos os resultados aparecem', () => {
     const filters = { ...defaultFilters, search: 'notebook' }
-    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={5} totalCount={5} />)
+    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={5} totalCount={5} products={[]} />)
     expect(screen.queryByText(/de 5/)).not.toBeInTheDocument()
   })
 })
