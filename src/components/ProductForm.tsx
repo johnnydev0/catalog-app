@@ -82,7 +82,12 @@ function ProductForm({ product, onSubmit, isSaving }: ProductFormProps) {
         error={errors.price?.message}
         placeholder="Ex: 49,90"
         hint="Informe o preço em reais"
-        {...register('price')}
+        inputMode="decimal"
+        {...register('price', {
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+            e.target.value = e.target.value.replace(/[^0-9.,]/g, '')
+          },
+        })}
       />
 
       <Controller

@@ -8,6 +8,7 @@ import { CATEGORY_OPTIONS, STATUS_OPTIONS } from '@/types/product'
 import type { Product } from '@/types/product'
 import { parseNaturalLanguageFilters } from '@/utils/aiSearch'
 import type { ParsedFilters } from '@/utils/aiSearch'
+import type { SortOption } from '@/hooks/useProducts'
 
 interface Filters {
   search: string
@@ -18,6 +19,8 @@ interface Filters {
 interface FilterBarProps {
   filters: Filters
   onChange: (filters: Filters) => void
+  sort: SortOption
+  onSortChange: (sort: SortOption) => void
   resultCount: number
   totalCount: number
   products: Product[]
@@ -35,6 +38,15 @@ const categoryOptions = [
   ...CATEGORY_OPTIONS.map((o) => ({ value: o.value, label: o.label })),
 ]
 
+const sortOptions: { value: SortOption; label: string }[] = [
+  { value: 'date-desc', label: 'Mais recentes' },
+  { value: 'date-asc', label: 'Mais antigos' },
+  { value: 'name-asc', label: 'Nome A–Z' },
+  { value: 'name-desc', label: 'Nome Z–A' },
+  { value: 'price-asc', label: 'Menor preço' },
+  { value: 'price-desc', label: 'Maior preço' },
+]
+
 function countLiteralMatches(products: Product[], term: string): number {
   const q = term.toLowerCase()
   return products.filter(
@@ -45,13 +57,12 @@ function countLiteralMatches(products: Product[], term: string): number {
   ).length
 }
 
-function FilterBar({ filters, onChange, resultCount, totalCount, products }: FilterBarProps) {
+function FilterBar({ filters, onChange, sort, onSortChange, resultCount, totalCount, products }: FilterBarProps) {
   const [inputValue, setInputValue] = useState(filters.search)
   const [isSearching, setIsSearching] = useState(false)
   const [aiExtracted, setAiExtracted] = useState<ParsedFilters | null>(null)
   const [aiError, setAiError] = useState<string | null>(null)
 
-  // sync input when all filters are cleared externally (e.g. EmptyState "Limpar filtros")
   useEffect(() => {
     if (!filters.search && !filters.status && !filters.category) {
       setInputValue('')
@@ -87,14 +98,12 @@ function FilterBar({ filters, onChange, resultCount, totalCount, products }: Fil
       return
     }
 
-    // Step 1: try literal match
     if (countLiteralMatches(products, q) > 0) {
       setAiExtracted(null)
       onChange({ ...filters, search: q })
       return
     }
 
-    // Step 2: no literal results → fallback to AI
     setIsSearching(true)
     setAiError(null)
     try {
@@ -103,7 +112,6 @@ function FilterBar({ filters, onChange, resultCount, totalCount, products }: Fil
       onChange(extracted)
     } catch (err) {
       setAiError(err instanceof Error ? err.message : 'Erro ao processar busca com IA.')
-      // still apply literal (will show empty state)
       onChange({ ...filters, search: q })
     } finally {
       setIsSearching(false)
@@ -127,6 +135,7 @@ function FilterBar({ filters, onChange, resultCount, totalCount, products }: Fil
 
   return (
     <div className="space-y-3">
+      {/* Search row */}
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <Search
@@ -156,8 +165,10 @@ function FilterBar({ filters, onChange, resultCount, totalCount, products }: Fil
             Buscar
           </button>
         </div>
-        <div className="flex gap-2 items-center">
-          <div className="w-44">
+
+        {/* Filter + sort controls */}
+        <div className="flex flex-wrap gap-2 items-center">
+          <div className="w-40">
             <Select
               options={statusOptions}
               value={toSelectValue(filters.status)}
@@ -165,12 +176,20 @@ function FilterBar({ filters, onChange, resultCount, totalCount, products }: Fil
               placeholder="Status"
             />
           </div>
-          <div className="w-52">
+          <div className="w-48">
             <Select
               options={categoryOptions}
               value={toSelectValue(filters.category)}
               onValueChange={(v) => onChange({ ...filters, category: fromSelectValue(v) })}
               placeholder="Categoria"
+            />
+          </div>
+          <div className="w-40">
+            <Select
+              options={sortOptions}
+              value={sort}
+              onValueChange={(v) => onSortChange(v as SortOption)}
+              placeholder="Ordenar"
             />
           </div>
           {hasFilters && (

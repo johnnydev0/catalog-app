@@ -10,6 +10,37 @@ interface Filters {
   category: string;
 }
 
+export type SortOption =
+  | 'date-desc'
+  | 'date-asc'
+  | 'name-asc'
+  | 'name-desc'
+  | 'price-asc'
+  | 'price-desc';
+
+function sortProducts(products: Product[], sort: SortOption): Product[] {
+  const [field, direction] = sort.split('-') as [string, 'asc' | 'desc'];
+  return [...products].sort((a, b) => {
+    let aVal: string | number;
+    let bVal: string | number;
+
+    if (field === 'name') {
+      aVal = a.name.toLowerCase();
+      bVal = b.name.toLowerCase();
+    } else if (field === 'price') {
+      aVal = a.price;
+      bVal = b.price;
+    } else {
+      aVal = a.updatedAt;
+      bVal = b.updatedAt;
+    }
+
+    if (aVal < bVal) return direction === 'asc' ? -1 : 1;
+    if (aVal > bVal) return direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+
 export function useProducts() {
   const queryClient = useQueryClient();
 
@@ -18,6 +49,8 @@ export function useProducts() {
     status: '',
     category: '',
   });
+
+  const [sort, setSort] = useState<SortOption>('date-desc');
 
   const { data: products = [], isLoading, isError, refetch } = useQuery({
     queryKey: ['products'],
@@ -71,7 +104,7 @@ export function useProducts() {
     const { search, status, category } = filters;
     const term = search.toLowerCase();
 
-    return products.filter((p) => {
+    const filtered = products.filter((p) => {
       if (term) {
         const matchesText =
           p.name.toLowerCase().includes(term) ||
@@ -83,7 +116,9 @@ export function useProducts() {
       if (category && p.category !== category) return false;
       return true;
     });
-  }, [products, filters]);
+
+    return sortProducts(filtered, sort);
+  }, [products, filters, sort]);
 
   const stats = useMemo(
     () => ({
@@ -108,6 +143,8 @@ export function useProducts() {
     refetch,
     filters,
     setFilters,
+    sort,
+    setSort,
     createProduct: createMutation.mutate,
     createProductAsync: createMutation.mutateAsync,
     updateProduct: updateMutation.mutate,

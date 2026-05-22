@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Bot, Send, X, Trash2 } from 'lucide-react'
+import { Bot, Send, X, Trash2, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Product, ProductFormData } from '@/types/product'
 import { runChatTurn, type ChatMessage } from '@/utils/aiChatbot'
@@ -69,12 +69,18 @@ export function Chatbot({ products, createProduct, updateProduct, deleteProduct 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
       {isOpen && (
-        <div className="flex flex-col w-80 h-[480px] rounded-2xl shadow-2xl border border-border bg-surface overflow-hidden animate-[fade-in_0.2s_ease-out]">
+        <div className="flex flex-col w-80 h-[500px] rounded-2xl shadow-2xl border border-border bg-card overflow-hidden animate-[fade-in_0.2s_ease-out]">
+
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 bg-card text-foreground border-b border-border shadow-sm shrink-0">
             <div className="flex items-center gap-2">
-              <Bot size={17} />
-              <span className="font-medium text-sm">Assistente IA</span>
+              <div className="rounded-full bg-primary/10 p-1.5">
+                <Sparkles size={14} className="text-primary" />
+              </div>
+              <div>
+                <p className="font-semibold text-sm leading-none">Assistente IA</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5 leading-none">Powered by Claude</p>
+              </div>
             </div>
             <div className="flex items-center gap-1">
               <button
@@ -83,7 +89,7 @@ export function Chatbot({ products, createProduct, updateProduct, deleteProduct 
                 aria-label="Limpar conversa"
                 title="Limpar conversa"
               >
-                <Trash2 size={14} />
+                <Trash2 size={13} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
@@ -96,18 +102,23 @@ export function Chatbot({ products, createProduct, updateProduct, deleteProduct 
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/30">
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={cn('flex', msg.role === 'user' ? 'justify-end' : 'justify-start')}
+                className={cn('flex gap-2', msg.role === 'user' ? 'justify-end' : 'justify-start')}
               >
+                {msg.role === 'assistant' && (
+                  <div className="shrink-0 mt-1 w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <Bot size={12} className="text-primary" />
+                  </div>
+                )}
                 <div
                   className={cn(
-                    'max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap',
+                    'max-w-[80%] rounded-2xl px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap',
                     msg.role === 'user'
                       ? 'bg-primary text-primary-foreground rounded-br-sm'
-                      : 'bg-neutral-100 text-neutral-800 rounded-bl-sm',
+                      : 'bg-card text-foreground border border-border rounded-bl-sm shadow-sm',
                   )}
                 >
                   {msg.content}
@@ -116,11 +127,14 @@ export function Chatbot({ products, createProduct, updateProduct, deleteProduct 
             ))}
 
             {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-neutral-100 rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1.5 items-center">
-                  <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce [animation-delay:300ms]" />
+              <div className="flex gap-2 justify-start">
+                <div className="shrink-0 mt-1 w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <Bot size={12} className="text-primary" />
+                </div>
+                <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1.5 items-center shadow-sm">
+                  <span className="w-1.5 h-1.5 bg-muted-foreground/50 rounded-full animate-bounce [animation-delay:0ms]" />
+                  <span className="w-1.5 h-1.5 bg-muted-foreground/50 rounded-full animate-bounce [animation-delay:150ms]" />
+                  <span className="w-1.5 h-1.5 bg-muted-foreground/50 rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
               </div>
             )}
@@ -129,7 +143,7 @@ export function Chatbot({ products, createProduct, updateProduct, deleteProduct 
           </div>
 
           {/* Input */}
-          <div className="border-t border-border p-3 flex gap-2 shrink-0">
+          <div className="border-t border-border bg-card p-3 flex gap-2 shrink-0">
             <input
               ref={inputRef}
               type="text"
@@ -138,7 +152,7 @@ export function Chatbot({ products, createProduct, updateProduct, deleteProduct 
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && void handleSend()}
               placeholder="Digite uma mensagem..."
               disabled={isLoading}
-              className="flex-1 text-sm bg-neutral-100 rounded-full px-4 py-2 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-60 placeholder:text-neutral-400"
+              className="flex-1 text-sm bg-muted rounded-full px-4 py-2 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-60 placeholder:text-muted-foreground text-foreground"
             />
             <button
               onClick={() => void handleSend()}
