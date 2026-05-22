@@ -126,7 +126,7 @@ describe('FilterBar', () => {
 
   it('não exibe contagem quando todos os resultados aparecem', () => {
     const filters = { ...defaultFilters, search: 'notebook' }
-    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={5} totalCount={5} products={[]} />)
+    render(<FilterBar filters={filters} onChange={vi.fn()} sort={defaultSort} onSortChange={noopSort} resultCount={5} totalCount={5} products={[]} />)
     expect(screen.queryByText(/de 5/)).not.toBeInTheDocument()
   })
 })
