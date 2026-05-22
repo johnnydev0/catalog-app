@@ -17,6 +17,8 @@ const mockProduct: Product = {
 }
 
 const defaultFilters = { search: '', status: '', category: '' }
+const defaultSort = 'date-desc' as const
+const noopSort = vi.fn()
 
 describe('ProductCard', () => {
   it('renderiza o nome do produto', () => {
@@ -75,18 +77,18 @@ describe('ProductCard', () => {
 
 describe('FilterBar', () => {
   it('renderiza o campo de busca', () => {
-    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} resultCount={5} totalCount={5} products={[]} />)
+    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} sort={defaultSort} onSortChange={noopSort} resultCount={5} totalCount={5} products={[]} />)
     expect(screen.getByPlaceholderText(/buscar/i)).toBeInTheDocument()
   })
 
   it('não exibe o botão limpar quando não há filtros ativos', () => {
-    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} resultCount={5} totalCount={5} products={[]} />)
+    render(<FilterBar filters={defaultFilters} onChange={vi.fn()} sort={defaultSort} onSortChange={noopSort} resultCount={5} totalCount={5} products={[]} />)
     expect(screen.queryByRole('button', { name: /limpar/i })).not.toBeInTheDocument()
   })
 
   it('exibe o botão limpar quando há filtro de busca ativo', () => {
     const filters = { ...defaultFilters, search: 'notebook' }
-    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={2} totalCount={5} products={[]} />)
+    render(<FilterBar filters={filters} onChange={vi.fn()} sort={defaultSort} onSortChange={noopSort} resultCount={2} totalCount={5} products={[]} />)
     expect(screen.getByRole('button', { name: /limpar/i })).toBeInTheDocument()
   })
 
@@ -96,6 +98,8 @@ describe('FilterBar', () => {
       <FilterBar
         filters={defaultFilters}
         onChange={onChange}
+        sort={defaultSort}
+        onSortChange={noopSort}
         resultCount={5}
         totalCount={5}
         products={[mockProduct]}
@@ -109,14 +113,14 @@ describe('FilterBar', () => {
   it('chama onChange com filtros zerados ao clicar em limpar', () => {
     const onChange = vi.fn()
     const filters = { search: 'notebook', status: '', category: '' }
-    render(<FilterBar filters={filters} onChange={onChange} resultCount={2} totalCount={5} products={[]} />)
+    render(<FilterBar filters={filters} onChange={onChange} sort={defaultSort} onSortChange={noopSort} resultCount={2} totalCount={5} products={[]} />)
     fireEvent.click(screen.getByRole('button', { name: /limpar/i }))
     expect(onChange).toHaveBeenCalledWith({ search: '', status: '', category: '' })
   })
 
   it('exibe a contagem de resultados quando está filtrando', () => {
     const filters = { ...defaultFilters, search: 'notebook' }
-    render(<FilterBar filters={filters} onChange={vi.fn()} resultCount={2} totalCount={5} products={[]} />)
+    render(<FilterBar filters={filters} onChange={vi.fn()} sort={defaultSort} onSortChange={noopSort} resultCount={2} totalCount={5} products={[]} />)
     expect(screen.getByText(/2 de 5/)).toBeInTheDocument()
   })
 
