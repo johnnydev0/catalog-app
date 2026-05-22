@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Search, X, Sparkles, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
@@ -62,14 +62,6 @@ function FilterBar({ filters, onChange, sort, onSortChange, resultCount, totalCo
   const [isSearching, setIsSearching] = useState(false)
   const [aiExtracted, setAiExtracted] = useState<ParsedFilters | null>(null)
   const [aiError, setAiError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!filters.search && !filters.status && !filters.category) {
-      setInputValue('')
-      setAiExtracted(null)
-      setAiError(null)
-    }
-  }, [filters.search, filters.status, filters.category])
 
   const hasFilters = filters.search || filters.status || filters.category
   const isFiltering = Boolean(hasFilters) && resultCount !== totalCount
