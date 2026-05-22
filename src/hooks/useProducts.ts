@@ -109,7 +109,10 @@ export function useProducts() {
     filters,
     setFilters,
     createProduct: createMutation.mutate,
+    createProductAsync: createMutation.mutateAsync,
     updateProduct: updateMutation.mutate,
+    updateProductAsync: updateMutation.mutateAsync,
     deleteProduct: deleteMutation.mutate,
+    deleteProductAsync: deleteMutation.mutateAsync,
   };
 }

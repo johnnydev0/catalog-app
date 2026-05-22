@@ -5,6 +5,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { ProductForm } from '@/components/ProductForm'
 import { FilterBar } from '@/components/FilterBar'
 import { StatsCards } from '@/components/StatsCards'
+import { Chatbot } from '@/components/Chatbot'
 
 import { Drawer } from '@/components/ui/Drawer'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -24,8 +25,11 @@ export function CatalogPage() {
     filters,
     setFilters,
     createProduct,
+    createProductAsync,
     updateProduct,
+    updateProductAsync,
     deleteProduct,
+    deleteProductAsync,
   } = useProducts()
 
   const {
@@ -42,6 +46,7 @@ export function CatalogPage() {
   } = useCatalogActions({ createProduct, updateProduct, deleteProduct })
 
   return (
+    <>
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
@@ -136,5 +141,13 @@ export function CatalogPage() {
         onCancel={() => setDeleteConfirm(undefined)}
       />
     </div>
+
+    <Chatbot
+      products={products}
+      createProduct={createProductAsync}
+      updateProduct={updateProductAsync}
+      deleteProduct={deleteProductAsync}
+    />
+    </>
   )
 }
