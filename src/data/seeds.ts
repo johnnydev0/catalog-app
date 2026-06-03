@@ -1,12 +1,5 @@
 import type { Product } from '@/types/product';
-import imgMacbook from '@/assets/products/macbook15.jpg';
 import imgFone from '@/assets/products/fone_bluetooth.webp';
-import imgJaqueta from '@/assets/products/jaqueta.avif';
-import imgTenis from '@/assets/products/tenis_adidas.avif';
-import imgWhey from '@/assets/products/whey.jpg';
-import imgEstante from '@/assets/products/estante.jpg';
-import imgSerra from '@/assets/products/serra.jpg';
-import imgNotebook from '@/assets/products/notebook_inspiron.jpg';
 
 const now = new Date();
 const daysAgo = (d: number) => new Date(now.getTime() - d * 86400000).toISOString();
@@ -20,7 +13,7 @@ export const seedProducts: Product[] = [
     price: 849900,
     category: 'electronics',
     status: 'active',
-    image: imgMacbook,
+    image: imgFone,
     createdAt: daysAgo(28),
     updatedAt: daysAgo(5),
   },
@@ -44,7 +37,7 @@ export const seedProducts: Product[] = [
     price: 18990,
     category: 'clothing',
     status: 'active',
-    image: imgJaqueta,
+    image: imgFone,
     createdAt: daysAgo(18),
     updatedAt: daysAgo(18),
   },
@@ -56,7 +49,7 @@ export const seedProducts: Product[] = [
     price: 89990,
     category: 'clothing',
     status: 'inactive',
-    image: imgTenis,
+    image: imgFone,
     createdAt: daysAgo(30),
     updatedAt: daysAgo(12),
   },
@@ -68,7 +61,7 @@ export const seedProducts: Product[] = [
     price: 15990,
     category: 'food',
     status: 'active',
-    image: imgWhey,
+    image: imgFone,
     createdAt: daysAgo(10),
     updatedAt: daysAgo(10),
   },
@@ -80,7 +73,7 @@ export const seedProducts: Product[] = [
     price: 78900,
     category: 'furniture',
     status: 'active',
-    image: imgEstante,
+    image: imgFone,
     createdAt: daysAgo(22),
     updatedAt: daysAgo(22),
   },
@@ -92,7 +85,7 @@ export const seedProducts: Product[] = [
     price: 64900,
     category: 'tools',
     status: 'active',
-    image: imgSerra,
+    image: imgFone,
     createdAt: daysAgo(14),
     updatedAt: daysAgo(7),
   },
@@ -104,7 +97,7 @@ export const seedProducts: Product[] = [
     price: 349900,
     category: 'electronics',
     status: 'out_of_stock',
-    image: imgNotebook,
+    image: imgFone,
     createdAt: daysAgo(6),
     updatedAt: daysAgo(1),
   },

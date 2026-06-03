@@ -51,7 +51,7 @@ function StatsCards({ stats }: StatsCardsProps) {
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {items.map(({ label, value, icon: Icon, iconClass, iconBg, accentClass }) => (
         <div key={label} className="rounded-xl border border-border bg-card overflow-hidden relative">
-          <div className={`absolute top-0 inset-x-0 h-0.5 ${accentClass}`} />
+          <div className={`absolute top-0 inset-x-0  h-0.5 ${accentClass}`} />
           <div className="p-4 pt-5">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
