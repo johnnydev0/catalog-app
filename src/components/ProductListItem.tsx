@@ -27,7 +27,7 @@ const ProductListItem = React.memo(function ProductListItem({
     CATEGORY_OPTIONS.find((c) => c.value === product.category)?.label ?? product.category
 
   return (
-    <div className="animate-fade-in flex items-center gap-4 rounded-xl border border-border bg-card px-4 py-3 transition-all duration-200 hover:border-friendly-blush-dark/30 hover:shadow-md">
+    <div className="animate-fade-in flex items-center gap-4 rounded-xl border border-border bg-card px-4 py-3 transition-all duration-200 hover:border-brand-blue/25 hover:shadow-md">
       {/* Status badge */}
       <div className="shrink-0">
         <Badge variant={statusVariantMap[product.status]} dot>

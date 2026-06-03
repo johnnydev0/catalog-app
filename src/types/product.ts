@@ -5,10 +5,11 @@ export interface Product {
   name: string;
   description: string;
   sku: string;
-  price: number; 
+  price: number;
   category: string;
   status: ProductStatus;
-  createdAt: string; 
+  image?: string;
+  createdAt: string;
   updatedAt: string;
 }
 

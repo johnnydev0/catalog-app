@@ -17,45 +17,54 @@ function StatsCards({ stats }: StatsCardsProps) {
       label: 'Total',
       value: stats.total,
       icon: Package,
-      bg: 'bg-card border-border',
-      iconColor: 'text-foreground/60',
+      iconClass: 'text-brand-cyan',
+      iconBg: 'bg-brand-blue/15',
+      accentClass: 'bg-brand-blue',
     },
     {
       label: 'Ativos',
       value: stats.ativos,
       icon: CheckCircle,
-      bg: 'bg-friendly-mint/30 border-friendly-mint-dark/20',
-      iconColor: 'text-green-700',
+      iconClass: 'text-green-400',
+      iconBg: 'bg-green-500/15',
+      accentClass: 'bg-green-500',
     },
     {
       label: 'Inativos',
       value: stats.inativos,
       icon: XCircle,
-      bg: 'bg-muted border-border',
-      iconColor: 'text-neutral-400',
+      iconClass: 'text-white/40',
+      iconBg: 'bg-white/8',
+      accentClass: 'bg-white/25',
     },
     {
       label: 'Esgotados',
       value: stats.esgotados,
       icon: AlertTriangle,
-      bg: 'bg-friendly-blush/30 border-friendly-blush-dark/20',
-      iconColor: 'text-red-600',
+      iconClass: 'text-red-400',
+      iconBg: 'bg-red-500/15',
+      accentClass: 'bg-red-500',
     },
   ]
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {items.map(({ label, value, icon: Icon, bg, iconColor }) => (
-        <div key={label} className={`rounded-2xl border p-4 ${bg}`}>
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              {label}
+      {items.map(({ label, value, icon: Icon, iconClass, iconBg, accentClass }) => (
+        <div key={label} className="rounded-xl border border-border bg-card overflow-hidden relative">
+          <div className={`absolute top-0 inset-x-0  h-0.5 ${accentClass}`} />
+          <div className="p-4 pt-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                {label}
+              </p>
+              <div className={`rounded-lg p-1.5 ${iconBg}`}>
+                <Icon size={14} className={iconClass} />
+              </div>
+            </div>
+            <p className="text-3xl font-semibold text-foreground tracking-tight">
+              {value}
             </p>
-            <Icon size={15} className={iconColor} />
           </div>
-          <p className="font-heading text-3xl font-semibold text-foreground tracking-tight">
-            {value}
-          </p>
         </div>
       ))}
     </div>

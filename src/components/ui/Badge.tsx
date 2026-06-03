@@ -7,9 +7,9 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        success: 'bg-friendly-mint text-green-700',
-        neutral: 'bg-neutral-100 text-neutral-600',
-        danger: 'bg-friendly-blush text-red-700',
+        success: 'bg-green-500/15 text-green-400',
+        neutral: 'bg-white/10 text-white/50',
+        danger: 'bg-red-500/15 text-red-400',
         outline: 'border border-border text-foreground',
       },
     },
@@ -30,8 +30,8 @@ function Badge({ className, variant, dot, children, ...props }: BadgeProps) {
         <span
           className={cn(
             'h-1.5 w-1.5 rounded-full',
-            variant === 'success' && 'bg-green-600',
-            variant === 'danger' && 'bg-red-600',
+            variant === 'success' && 'bg-green-500',
+            variant === 'danger' && 'bg-red-500',
             variant === 'neutral' && 'bg-neutral-400',
           )}
         />
