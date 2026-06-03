@@ -198,21 +198,21 @@ function FilterBar({ filters, onChange, sort, onSortChange, resultCount, totalCo
       {hasAiExtracted && !aiError && (
         <div className="flex flex-wrap items-center gap-2">
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Sparkles size={12} className="text-violet-500" />
+            <Sparkles size={12} className="text-violet-400" />
             Busca interpretada por IA:
           </span>
           {aiExtracted!.search && (
-            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs text-violet-700">
+            <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-xs text-violet-300">
               Texto: {aiExtracted!.search}
             </span>
           )}
           {aiExtracted!.status && (
-            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs text-violet-700">
+            <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-xs text-violet-300">
               Status: {getStatusLabel(aiExtracted!.status)}
             </span>
           )}
           {aiExtracted!.category && (
-            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs text-violet-700">
+            <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-xs text-violet-300">
               Categoria: {getCategoryLabel(aiExtracted!.category)}
             </span>
           )}

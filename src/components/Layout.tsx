@@ -1,38 +1,31 @@
 import { type ReactNode } from 'react'
-import { Boxes, Moon, Sun } from 'lucide-react'
-import { useDarkMode } from '@/hooks/useDarkMode'
+import logoClaro from '@/assets/logo-claro.svg'
 
 interface LayoutProps {
   children: ReactNode
 }
 
 function Layout({ children }: LayoutProps) {
-  const { isDark, toggle } = useDarkMode()
-
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-friendly-blush p-2.5 shadow-sm">
-                <Boxes size={22} className="text-friendly-ink" />
-              </div>
-              <div>
-                <h1 className="font-heading text-xl font-semibold tracking-tight text-foreground">
-                  Catálogo de Itens
-                </h1>
-                <p className="text-xs text-muted-foreground">Gerencie seus produtos</p>
-              </div>
-            </div>
+      <header
+        className="sticky top-0 z-40 shadow-lg relative"
+        style={{ background: '#080629' }}
+      >
+        <div
+          className="absolute bottom-0 inset-x-0 h-[2px]"
+          style={{ background: 'linear-gradient(90deg, #0065ff 0%, #16b8ff 100%)' }}
+        />
 
-            <button
-              onClick={toggle}
-              className="rounded-xl p-2.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-              aria-label={isDark ? 'Ativar modo claro' : 'Ativar modo escuro'}
-            >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center">
+            <div className="flex items-center gap-4">
+              <img src={logoClaro} alt="Inbot" className="h-7 w-auto" />
+              <div className="hidden sm:block h-5 w-px bg-white/20" />
+              <span className="hidden sm:block text-sm font-medium text-white/60">
+                Catálogo de Produtos
+              </span>
+            </div>
           </div>
         </div>
       </header>

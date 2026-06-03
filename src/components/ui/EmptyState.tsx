@@ -14,8 +14,8 @@ interface EmptyStateProps {
 function EmptyState({ icon: Icon, title, description, action }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
-      <div className="mb-5 rounded-3xl bg-friendly-blush/40 p-5">
-        <Icon size={32} className="text-friendly-blush-dark" />
+      <div className="mb-5 rounded-3xl bg-brand-blue/15 p-5">
+        <Icon size={32} className="text-brand-cyan" />
       </div>
       <h3 className="font-heading text-lg font-semibold text-foreground">{title}</h3>
       {description && (

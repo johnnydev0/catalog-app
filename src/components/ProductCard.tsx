@@ -24,7 +24,7 @@ const ProductCard = React.memo(function ProductCard({ product, onEdit, onDelete 
     CATEGORY_OPTIONS.find((c) => c.value === product.category)?.label ?? product.category
 
   return (
-    <div className="animate-fade-in group rounded-2xl border border-border bg-card overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/8 hover:border-friendly-blush-dark/30">
+    <div className="animate-fade-in group rounded-xl border border-border bg-card overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-blue/8 hover:border-brand-blue/25">
 
       {/* Image */}
       <div className="relative overflow-hidden h-96 shrink-0">
