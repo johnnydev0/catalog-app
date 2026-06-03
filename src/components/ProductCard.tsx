@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { type Product, STATUS_CONFIG, CATEGORY_OPTIONS } from '@/types/product'
 import { formatPrice, timeAgo } from '@/utils/format'
-import productImage from '@/assets/first-product.avif'
+import fallbackImage from '@/assets/first-product.avif'
 
 interface ProductCardProps {
   product: Product
@@ -27,9 +27,9 @@ const ProductCard = React.memo(function ProductCard({ product, onEdit, onDelete 
     <div className="animate-fade-in group rounded-2xl border border-border bg-card overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/8 hover:border-friendly-blush-dark/30">
 
       {/* Image */}
-      <div className="relative overflow-hidden h-64 shrink-0">
+      <div className="relative overflow-hidden h-96 shrink-0">
         <img
-          src={productImage}
+          src={product.image ?? fallbackImage}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
